@@ -26,7 +26,6 @@ use crate::framework::Framework;
 use crate::gateway::{ConnectionStage, InterMessage, Shard};
 use crate::internal::prelude::*;
 use crate::internal::tokio::spawn_named;
-use crate::model::gateway::GatewayIntents;
 use crate::CacheAndHttp;
 
 const WAIT_BETWEEN_BOOTS_IN_SECONDS: u64 = 5;
@@ -78,8 +77,7 @@ pub struct ShardQueuer {
     pub voice_manager: Option<Arc<dyn VoiceGatewayManager + Send + Sync + 'static>>,
     /// A copy of the URL to use to connect to the gateway.
     pub ws_url: Arc<Mutex<String>>,
-    pub cache_and_http: Arc<CacheAndHttp>,
-    pub intents: GatewayIntents,
+    pub cache_and_http: Arc<CacheAndHttp>
 }
 
 impl ShardQueuer {
@@ -176,8 +174,7 @@ impl ShardQueuer {
         let mut shard = Shard::new(
             Arc::clone(&self.ws_url),
             &self.cache_and_http.http.token,
-            shard_info,
-            self.intents,
+            shard_info
         )
         .await?;
 

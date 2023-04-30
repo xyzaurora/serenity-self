@@ -10,7 +10,6 @@ use crate::gateway::{CurrentPresence, WsStream};
 use crate::internal::prelude::*;
 use crate::internal::ws_impl::SenderExt;
 use crate::json::json;
-use crate::model::gateway::GatewayIntents;
 use crate::model::id::GuildId;
 
 #[async_trait]
@@ -29,8 +28,7 @@ pub trait WebSocketGatewayClientExt {
     async fn send_identify(
         &mut self,
         shard_info: &[u64; 2],
-        token: &str,
-        intents: GatewayIntents,
+        token: &str
     ) -> Result<()>;
 
     async fn send_presence_update(
@@ -98,8 +96,7 @@ impl WebSocketGatewayClientExt for WsStream {
     async fn send_identify(
         &mut self,
         shard_info: &[u64; 2],
-        token: &str,
-        intents: GatewayIntents,
+        token: &str
     ) -> Result<()> {
         debug!("[Shard {:?}] Identifying", shard_info);
 
@@ -107,15 +104,23 @@ impl WebSocketGatewayClientExt for WsStream {
             "op": OpCode::Identify.num(),
             "d": {
                 "compress": true,
-                "large_threshold": constants::LARGE_THRESHOLD,
-                "shard": shard_info,
                 "token": token,
-                "intents": intents,
                 "v": constants::GATEWAY_VERSION,
                 "properties": {
-                    "$browser": "serenity",
-                    "$device": "serenity",
-                    "$os": consts::OS,
+                    "browser": "Firefox",
+                    "device": "",
+                    "system_locale": "en-US",
+                    "browser_user_agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/109.0",
+                    "browser_version": "113.0",
+                    "os": "Linux",
+                    "os_version": "",
+                    "referrer": "",
+                    "referring_domain": "",
+                    "referrer_current": "",
+                    "referring_domain_current": "",
+                    "release_channel": "stable",
+                    "client_build_number": 193906,
+                    "design_id": 0
                 },
             },
         }))

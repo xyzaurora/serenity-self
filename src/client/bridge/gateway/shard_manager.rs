@@ -23,7 +23,6 @@ use crate::client::{EventHandler, RawEventHandler};
 use crate::framework::Framework;
 use crate::internal::prelude::*;
 use crate::internal::tokio::spawn_named;
-use crate::model::gateway::GatewayIntents;
 use crate::CacheAndHttp;
 
 /// A manager for handling the status of shards by starting them, restarting
@@ -138,8 +137,7 @@ impl ShardManager {
             #[cfg(feature = "voice")]
             voice_manager: opt.voice_manager.clone(),
             ws_url: Arc::clone(opt.ws_url),
-            cache_and_http: Arc::clone(opt.cache_and_http),
-            intents: opt.intents,
+            cache_and_http: Arc::clone(opt.cache_and_http)
         };
 
         spawn_named("shard_queuer::run", async move {
@@ -230,7 +228,7 @@ impl ShardManager {
     /// # async fn run() -> Result<(), Box<dyn std::error::Error>> {
     /// let token = std::env::var("DISCORD_TOKEN")?;
     /// let mut client =
-    ///     Client::builder(&token, GatewayIntents::default()).event_handler(Handler).await?;
+    ///     Client::builder(&token).event_handler(Handler).await?;
     ///
     /// // restart shard ID 7
     /// client.shard_manager.lock().await.restart(ShardId(7)).await;
@@ -356,6 +354,5 @@ pub struct ShardManagerOptions<'a> {
     #[cfg(feature = "voice")]
     pub voice_manager: &'a Option<Arc<dyn VoiceGatewayManager + Send + Sync + 'static>>,
     pub ws_url: &'a Arc<Mutex<String>>,
-    pub cache_and_http: &'a Arc<CacheAndHttp>,
-    pub intents: GatewayIntents,
+    pub cache_and_http: &'a Arc<CacheAndHttp>
 }
